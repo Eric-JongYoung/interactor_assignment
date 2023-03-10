@@ -1,0 +1,632 @@
+{
+  "$product": {
+    "deployment_mode": "SOLO",
+    "name": "API AutoFlow Pro",
+    "version": "3.0.19"
+  },
+  "API": [
+    {
+      "id": "api",
+      "type": "http",
+      "version": {
+        "0.0.0": {
+          "components": {},
+          "info": {
+            "description": "",
+            "title": "",
+            "version": "0.0.0"
+          },
+          "openapi": "3.0.2",
+          "paths": {
+            "/test": {
+              "get": {
+                "responses": {}
+              }
+            }
+          },
+          "servers": [],
+          "tags": []
+        }
+      }
+    },
+    {
+      "id": "get-board",
+      "type": "http",
+      "version": {
+        "0.0.0": {
+          "components": {},
+          "info": {
+            "description": "",
+            "title": "",
+            "version": "0.0.0"
+          },
+          "openapi": "3.0.2",
+          "paths": {
+            "/board/list": {
+              "get": {
+                "responses": {
+                  "default": {}
+                }
+              }
+            }
+          },
+          "servers": [],
+          "tags": []
+        }
+      }
+    }
+  ],
+  "Client": [
+    {
+      "currentVersion": "0.0.0",
+      "id": "client",
+      "type": "mariadb",
+      "version": {
+        "0.0.0": {
+          "events": [],
+          "info": {
+            "description": "",
+            "title": ""
+          },
+          "setting": {
+            "database": "training",
+            "password": "1234",
+            "servers": [
+              {
+                "address": "127.0.0.1",
+                "port": "3306",
+                "role": [
+                  "read"
+                ],
+                "ssl": false
+              }
+            ],
+            "username": "root"
+          }
+        }
+      }
+    }
+  ],
+  "Intent": [
+    {
+      "id": "homework",
+      "version": {
+        "0.0.0": {
+          "errorTypes": [],
+          "in": {
+            "__struct__": "Schema",
+            "type": "arguments",
+            "value": [
+              {
+                "__struct__": "Field",
+                "eval": true,
+                "id": "input-i",
+                "label": null,
+                "required": true,
+                "schema": {
+                  "__struct__": "Schema",
+                  "type": "json",
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "static": false
+              }
+            ]
+          },
+          "info": {
+            "description": "",
+            "title": ""
+          },
+          "out": {
+            "__struct__": "Schema",
+            "type": "arguments",
+            "value": [
+              {
+                "__struct__": "Field",
+                "eval": true,
+                "id": "out-i",
+                "label": null,
+                "required": true,
+                "schema": {
+                  "__struct__": "Schema",
+                  "type": "json",
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "static": false
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "intent",
+      "version": {
+        "0.0.0": {
+          "errorTypes": [],
+          "in": {
+            "__struct__": "Schema",
+            "type": "arguments",
+            "value": [
+              {
+                "__struct__": "Field",
+                "eval": true,
+                "id": "i-text",
+                "label": null,
+                "required": true,
+                "schema": {
+                  "__struct__": "Schema",
+                  "type": "json",
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "static": false
+              }
+            ]
+          },
+          "info": {
+            "description": "",
+            "title": ""
+          },
+          "out": {
+            "__struct__": "Schema",
+            "type": "arguments",
+            "value": [
+              {
+                "__struct__": "Field",
+                "eval": true,
+                "id": "i-out-text",
+                "label": null,
+                "required": true,
+                "schema": {
+                  "__struct__": "Schema",
+                  "type": "json",
+                  "value": {
+                    "type": "string"
+                  }
+                },
+                "static": false
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "Server": [
+    {
+      "currentVersion": "0.0.0",
+      "id": "first",
+      "type": "http",
+      "version": {
+        "0.0.0": {
+          "events": [
+            {
+              "event": {
+                "__struct__": "APIOperationReference",
+                "apiReference": {
+                  "__struct__": "APIReference",
+                  "id": "get-board",
+                  "version": "0.0.0"
+                },
+                "operationReference": {
+                  "__struct__": "HTTPOperationReference",
+                  "method": "get",
+                  "path": "/board/list"
+                }
+              },
+              "matches": [
+                {
+                  "do": {
+                    "__struct__": "Execution",
+                    "actions": [
+                      {
+                        "__struct__": "Action",
+                        "active": true,
+                        "category": "database",
+                        "description": null,
+                        "input": {
+                          "params": [],
+                          "processReference": {
+                            "__struct__": "ClientReference",
+                            "id": "client"
+                          },
+                          "processed": true,
+                          "query": "SELECT * FROM board ORDER BY create_date DESC",
+                          "return-error": false,
+                          "type": "read"
+                        },
+                        "log": false,
+                        "mockingFlag": false,
+                        "mockingValue": {
+                          "__struct__": "ClientReference",
+                          "id": "client"
+                        },
+                        "name": "query",
+                        "output": {
+                          "__struct__": "ScopeReference",
+                          "path": "array-db",
+                          "scope": "variables"
+                        },
+                        "title": null,
+                        "visualId": "4d351cf7-25ac-409d-9e0d-6f8aca220c60"
+                      }
+                    ],
+                    "mapping": {
+                      "body": {
+                        "__struct__": "ScopeReference",
+                        "path": [
+                          "array-db"
+                        ],
+                        "scope": "variables"
+                      },
+                      "header": {},
+                      "status_code": 200
+                    }
+                  },
+                  "in": {}
+                }
+              ],
+              "setting": {},
+              "test": {}
+            }
+          ],
+          "info": {
+            "description": "",
+            "title": ""
+          },
+          "setting": {
+            "allowCredentials": "*",
+            "allowHeaders": "*",
+            "allowMethods": "*",
+            "allowOrigin": "*",
+            "apis": [
+              {
+                "__struct__": "APIReference",
+                "id": "get-board",
+                "version": "0.0.0"
+              }
+            ],
+            "cors": true,
+            "id": "first",
+            "port": 8000,
+            "securities": [],
+            "tls": false
+          }
+        }
+      }
+    },
+    {
+      "currentVersion": "0.0.0",
+      "id": "server",
+      "type": "http",
+      "version": {
+        "0.0.0": {
+          "events": [
+            {
+              "event": {
+                "__struct__": "APIOperationReference",
+                "apiReference": {
+                  "__struct__": "APIReference",
+                  "id": "api",
+                  "version": "0.0.0"
+                },
+                "operationReference": {
+                  "__struct__": "HTTPOperationReference",
+                  "method": "get",
+                  "path": "/test"
+                }
+              },
+              "matches": [
+                {
+                  "do": {
+                    "__struct__": "Execution",
+                    "actions": [
+                      {
+                        "__struct__": "Action",
+                        "active": false,
+                        "category": "array",
+                        "description": null,
+                        "input": {
+                          "array": [
+                            "123",
+                            true
+                          ],
+                          "item": "test"
+                        },
+                        "log": false,
+                        "mockingFlag": false,
+                        "mockingValue": null,
+                        "name": "add",
+                        "output": {
+                          "__struct__": "ScopeReference",
+                          "path": [
+                            "array-add-result"
+                          ],
+                          "scope": "variables"
+                        },
+                        "title": null,
+                        "visualId": "bf75e4e6-c866-404d-a7d3-8f774567842f"
+                      },
+                      {
+                        "__struct__": "Action",
+                        "active": false,
+                        "category": "array",
+                        "description": null,
+                        "input": {
+                          "array": [
+                            "몰앙",
+                            true
+                          ],
+                          "item": "뿡"
+                        },
+                        "log": false,
+                        "mockingFlag": false,
+                        "mockingValue": null,
+                        "name": "add",
+                        "output": {
+                          "__struct__": "ScopeReference",
+                          "path": [
+                            "array-add-result"
+                          ],
+                          "scope": "variables"
+                        },
+                        "title": null,
+                        "visualId": "cf340504-e0f4-4684-acc1-6d6cfe9ac79b"
+                      },
+                      {
+                        "__struct__": "Action",
+                        "active": false,
+                        "category": "array",
+                        "description": null,
+                        "input": {
+                          "array": [
+                            {
+                              "__struct__": "ScopeReference",
+                              "path": [
+                                "array-add-result"
+                              ],
+                              "scope": "variables"
+                            }
+                          ],
+                          "item": "kkkk"
+                        },
+                        "log": false,
+                        "mockingFlag": false,
+                        "mockingValue": null,
+                        "name": "add",
+                        "output": {
+                          "__struct__": "ScopeReference",
+                          "path": [
+                            "output"
+                          ],
+                          "scope": "variables"
+                        },
+                        "title": null,
+                        "visualId": "31b310cf-b11a-4327-a579-ba336dd0c180"
+                      },
+                      {
+                        "__struct__": "Action",
+                        "active": true,
+                        "category": "database",
+                        "description": null,
+                        "input": {
+                          "params": [],
+                          "processReference": {
+                            "__struct__": "ClientReference",
+                            "id": "client"
+                          },
+                          "processed": true,
+                          "query": "SELECT * FROM board",
+                          "return-error": false,
+                          "type": "read"
+                        },
+                        "log": false,
+                        "mockingFlag": false,
+                        "mockingValue": null,
+                        "name": "query",
+                        "output": {
+                          "__struct__": "ScopeReference",
+                          "path": "result",
+                          "scope": "variables"
+                        },
+                        "title": null,
+                        "visualId": "092fd461-1ec0-48a1-96e3-b9806c2d40c3"
+                      }
+                    ],
+                    "mapping": {
+                      "body": {
+                        "__struct__": "ScopeReference",
+                        "path": [
+                          "result"
+                        ],
+                        "scope": "variables"
+                      },
+                      "header": {
+                        "__struct__": "ObjectMapping",
+                        "values": []
+                      },
+                      "status_code": 200
+                    }
+                  },
+                  "in": {}
+                }
+              ],
+              "setting": {},
+              "test": {}
+            }
+          ],
+          "info": {
+            "description": "",
+            "title": ""
+          },
+          "setting": {
+            "apis": [
+              {
+                "__struct__": "APIReference",
+                "id": "api",
+                "version": "0.0.0"
+              }
+            ],
+            "id": "server",
+            "port": 8080,
+            "securities": [],
+            "tls": false
+          }
+        }
+      }
+    }
+  ],
+  "Service": [
+    {
+      "id": "service",
+      "version": {
+        "0.0.0": {
+          "info": {
+            "description": "",
+            "title": ""
+          },
+          "operation": {
+            "get-text": {
+              "do": {
+                "__struct__": "Execution",
+                "actions": [],
+                "mapping": {
+                  "out-text": "Test"
+                }
+              },
+              "errorTypes": [],
+              "id": "get-text",
+              "in": {
+                "__struct__": "Schema",
+                "type": "arguments",
+                "value": [
+                  {
+                    "__struct__": "Field",
+                    "eval": true,
+                    "id": "text",
+                    "label": null,
+                    "required": true,
+                    "schema": {
+                      "__struct__": "Schema",
+                      "type": "json",
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "static": false
+                  }
+                ]
+              },
+              "info": {},
+              "intents": [
+                {
+                  "IntentReference": null,
+                  "input": {
+                    "__struct__": "Execution",
+                    "actions": [],
+                    "mapping": {
+                      "text": {
+                        "__struct__": "ScopeReference",
+                        "path": [
+                          "result"
+                        ],
+                        "scope": "variables"
+                      }
+                    }
+                  },
+                  "intentReference": {
+                    "__struct__": "IntentReference",
+                    "id": "intent",
+                    "version": "0.0.0"
+                  },
+                  "output": {
+                    "__struct__": "Execution",
+                    "actions": [],
+                    "mapping": {}
+                  },
+                  "test": {}
+                }
+              ],
+              "out": {
+                "__struct__": "Schema",
+                "type": "arguments",
+                "value": [
+                  {
+                    "__struct__": "Field",
+                    "eval": true,
+                    "id": "out-text",
+                    "label": null,
+                    "required": true,
+                    "schema": {
+                      "__struct__": "Schema",
+                      "type": "json",
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "static": false
+                  }
+                ]
+              },
+              "test": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "get-board",
+      "version": {
+        "0.0.0": {
+          "info": {
+            "description": "",
+            "title": ""
+          },
+          "operation": {
+            "get-board": {
+              "do": {
+                "__struct__": "Execution",
+                "actions": [],
+                "mapping": {}
+              },
+              "errorTypes": [],
+              "id": "get-board",
+              "in": {
+                "__struct__": "Schema",
+                "type": "arguments",
+                "value": []
+              },
+              "info": {},
+              "intents": [],
+              "out": {
+                "__struct__": "Schema",
+                "type": "arguments",
+                "value": [
+                  {
+                    "__struct__": "Field",
+                    "eval": true,
+                    "id": "get-board",
+                    "label": null,
+                    "required": true,
+                    "schema": {
+                      "__struct__": "Schema",
+                      "type": "json",
+                      "value": {}
+                    },
+                    "static": false
+                  }
+                ]
+              },
+              "test": {}
+            }
+          }
+        }
+      }
+    }
+  ]
+}
