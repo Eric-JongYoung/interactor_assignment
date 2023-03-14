@@ -68,7 +68,7 @@
 					{#each getPaginatedItems(currentPage) as item, index}
 						<tr>
 							<td style="text-align: center">{item.id}</td>
-							<td>{item.title}</td>
+							<td><a href="/board/{item.id}" class="board-link">{item.title}</a></td>
 							<td>{item.content}</td>
 							<td>
 								{new Date(item.create_date)
